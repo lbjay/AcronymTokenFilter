@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package org.ads.solr.analysis;
+package org.adsabs.solr.analysis;
 
 import java.io.IOException;
 import java.util.Stack;
