@@ -60,7 +60,6 @@ public class AcronymTokenFilter extends TokenFilter {
         }
 
         if (!input.incrementToken()) {                           //#4
-            log.info("incrementToken was false");
             return false;
         }
 
@@ -82,31 +81,23 @@ public class AcronymTokenFilter extends TokenFilter {
 
         if (termIsAcronym && emitBoth) {                              //#5
             current = captureState();                             //#6
-            log.info("state captured");
             this.acronym.append(origTerm);
-            log.info("acronym set to: " + origTerm);
         }
 
-        log.info("term to be indexed: " + new String(buffer));
         return true;
     }
 
     protected boolean createToken(String acronym, AttributeSource.State current) {
-        log.info("restoring state");
         restoreState(current);
         termAtt.setEmpty().append(acronym);
         typeAtt.setType(TOKEN_TYPE_ACRONYM);
         posIncrAtt.setPositionIncrement(0);
-        log.info("acronym to be indexed: " + termAtt);
         return true;
   }
     private boolean termIsAcronym(String term) {
-        log.info("checking acronym-iness of: " + term);
         if (term.length() < 3 || !term.equals(term.toUpperCase())) {
-            log.info("not an acronym!");
             return false;
         }
-        log.info("yes! an acronym!");
         return true;
     }
 
