@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 public class AcronymTokenFilter extends TokenFilter {
     public static final Logger log = LoggerFactory.getLogger(AcronymTokenFilter.class);
     public static final String TOKEN_TYPE_ACRONYM = "ACRONYM";
+    public static final int ACRONYM_MIN_LENGTH = 2;
 
     // stores our disocvered acronyms
     private StringBuffer acronym;
@@ -91,7 +92,7 @@ public class AcronymTokenFilter extends TokenFilter {
         return true;
   }
     private boolean termIsAcronym(String term) {
-        if (term.length() < 3 || !term.equals(term.toUpperCase())) {
+        if (term.length() < ACRONYM_MIN_LENGTH || !term.equals(term.toUpperCase())) {
             return false;
         }
         return true;
