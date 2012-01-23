@@ -17,56 +17,40 @@
     limitations under the License.
  -->
 
-<project name="acronym-filter" default="build">
+<project name="acronym-token-filter" default="build">
 
-  <property name="solr-path" value="../.."/>
-
-  <import file="../../common-build.xml"/>
+  <property file="build.properties" />
+  <property name="dest" value="build"/>
 
     <description>
-        Token filter for dealing with acronym case-sensitivity search
+        Author parsing components for Solr
     </description>
 
   <path id="common.classpath">
     <fileset dir="lib"/>
-    <pathelement location="${solr-path}/build/solr"/>
-    <pathelement location="${solr-path}/build/solrj"/>
-    <path refid="lucene.classpath"/>
-    <fileset dir="${solr-path}/lib" includes="*.jar"/>
+    <pathelement location="${solr_home}/solr/build/solr"/>
+    <pathelement location="${solr_home}/solr/build/solrj"/>
+    <pathelement location="${solr_home}/lucene/build/classes"/>
+    <fileset dir="${solr_home}/solr/lib" includes="*.jar"/>
+    <fileset dir="${solr_home}/lucene/build" includes="*.jar"/>
   </path>
 
   <target name="init">
     <mkdir dir="${dest}/classes"/>
-    
-    <mkdir dir="${build.javadoc}"/>
-    <!--
-    <subant target="compileTests">
-      <fileset dir="${solr-path}" includes="build.xml"/>
-    </subant>
-    -->
-    <subant target="make-manifest">
-      <fileset dir="${solr-path}" includes="build.xml"/>
-    </subant>
   </target>
 
   <target name="compile" depends="init">
-    <solr-javac destdir="${dest}/classes"
-                classpathref="common.classpath">
-      <src path="src/java"/>
-    </solr-javac>
+    <javac destdir="${dest}/classes" classpathref="common.classpath">
+      <src path="src"/>
+    </javac>
   </target>
 
   <target name="build" depends="compile">
-    <jar destfile="${dest}/${fullnamever}.jar" basedir="${dest}/classes"/>
+    <jar destfile="${dest}/${ant.project.name}.jar" basedir="${dest}/classes"/>
   </target>
 
   <target name="dist" depends="build">
-<!--
-    <solr-jar destfile="dist/field-query.jar"
-      basedir="build/classes"
-      manifest="../../${dest}/META-INF/MANIFEST.MF"/>
--->
-    <copy file="${dest}/${fullnamever}.jar" todir="lib"/>
+    <copy file="${dest}/${ant.project.name}.jar" todir="lib"/>
   </target>
 
   <target name="debug">
@@ -78,11 +62,4 @@
     <delete dir="dist"/>
   </target>
     
-  <target name="example" depends="dist">
-    <!-- this task use to copy lib's but that's no longer needed because
-         ../lib and ../lib/downloads are now included explicitly by
-         example/conf/solrconfig.xml
-      -->
-  </target>
-
 </project>
